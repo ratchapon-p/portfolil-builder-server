@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "gFQdGJ3D0CqIzuG6QfrzHTM1r85N9pgmckcvqzZLzHw=",
+  "Source": "portfolio-builder-server",
+  "BasePath": "_content/portfolio-builder-server",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
