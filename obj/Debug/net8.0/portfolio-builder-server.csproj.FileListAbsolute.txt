@@ -174,3 +174,4 @@ D:\Projects\portfolio-builder\portfolio-builder-server\bin\Debug\net8.0\System.S
 D:\Projects\portfolio-builder\portfolio-builder-server\bin\Debug\net8.0\System.Security.Cryptography.Xml.dll
 D:\Projects\portfolio-builder\portfolio-builder-server\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
 D:\Projects\portfolio-builder\portfolio-builder-server\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\Projects\portfolio-builder\portfolio-builder-server\obj\Debug\net8.0\portfolio-builder-server.sourcelink.json

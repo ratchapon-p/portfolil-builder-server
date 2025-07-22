@@ -26,7 +26,7 @@ public class TokenService(IConfiguration config) : ITokenService
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var defaultIssuer = config["Issuer"] ?? "https://localhost:5001";
-        var defaultAudience = config["Audience"] ?? "https://localhost:5001";
+        var defaultAudience = config["Audience"] ?? "http://localhost:3000";
 
         var token = new JwtSecurityToken(
             issuer: defaultIssuer,

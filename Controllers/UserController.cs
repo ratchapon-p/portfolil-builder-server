@@ -39,7 +39,7 @@ public class UserController(IUserAuthServices userAuth,ITokenService tokenServic
             IsEssential = true
         });
 
-        return Created();
+        return Ok(new { message = "Login success" });;
     }
 
 }
