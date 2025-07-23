@@ -17,9 +17,9 @@ public class ProjectController(IGenericListRepository<Project> repo) : BaseApiCo
     {
         var project = await repo.GetByIdAsync(id);
 
-        if (project == null) return NotFound("Not Found project form this id");
+        if (project == null) return NotFound(new { success = false, message = "Not Found project form this id" });
 
-        return project;
+        return Ok(new {success = true, data = project});;
     }
 
     [HttpGet("list/{userId:int}")]
@@ -56,7 +56,7 @@ public class ProjectController(IGenericListRepository<Project> repo) : BaseApiCo
             return CreatedAtAction("GetProjectById", new { id = project.Id }, project);
         }
 
-        return BadRequest("Problem create project");
+        return BadRequest(new {success= false, message = "Problem create project"});
     }
 
     [Authorize]
@@ -65,11 +65,11 @@ public class ProjectController(IGenericListRepository<Project> repo) : BaseApiCo
     {
         var userId = GetUserId();
 
-        if (projectItem.Id != id) return BadRequest("Cannot update project");
+        if (projectItem.Id != id) return BadRequest(new {success= false, message = "Cannot update project"});
 
         var project = await repo.GetByIdAsync(id);
 
-        if (project == null || project.UserId != userId) return NotFound("Project not found or does not belong to user");
+        if (project == null || project.UserId != userId) return NotFound(new {success= false, message = "Project not found or does not belong to user"});
 
         project.Name = projectItem.Name;
         project.TechStack = projectItem.TechStack;
@@ -83,7 +83,7 @@ public class ProjectController(IGenericListRepository<Project> repo) : BaseApiCo
             return NoContent();
         }
 
-        return BadRequest("Problem Update project");
+        return BadRequest(new {success= false, message = "Problem Update project"});
     }
 
     [Authorize]
@@ -92,7 +92,7 @@ public class ProjectController(IGenericListRepository<Project> repo) : BaseApiCo
     {
         var project = await repo.GetByIdAsync(id);
 
-        if (project == null) return NotFound("Not Found Project to delete");
+        if (project == null) return NotFound(new {success= false, message = "Not Found Project to delete"});
 
         repo.Remove(project);
 
@@ -101,6 +101,6 @@ public class ProjectController(IGenericListRepository<Project> repo) : BaseApiCo
             return NoContent();
         }
 
-        return BadRequest("Problem delete project");
+        return BadRequest(new {success= false, message = "Problem delete project"});
     }
 }

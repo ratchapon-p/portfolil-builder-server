@@ -19,7 +19,7 @@ public class ProfileController(IProfileRepository profile) : BaseApiController
     {
         var profileItem = await profile.GetProfileByIdAsync(id);
         if (profileItem == null) return NotFound();
-        return profileItem;
+        return Ok(new {success = true, data = profileItem});;
     }
 
     //! ทำให้ get user id จาก authorize เพื่อ save ลง db ของตัวอื่นๆได้
@@ -37,7 +37,7 @@ public class ProfileController(IProfileRepository profile) : BaseApiController
         {
             return CreatedAtAction("GetProfile", new { id = profileItem.Id }, profileItem);
         }
-        return BadRequest("Problem Create Profile");
+        return BadRequest(new {success= false, message = "Problem Create Profile"});
     }
 
     [Authorize]
@@ -48,7 +48,7 @@ public class ProfileController(IProfileRepository profile) : BaseApiController
 
         profileItem.UserId = userId;
 
-        if (profileItem.Id != id || !profile.ProfileExists(id)) return BadRequest("Cannot update profile, Profile not exists");
+        if (profileItem.Id != id || !profile.ProfileExists(id)) return BadRequest(new {success= false, message = "Cannot update profile, Profile not exists"});
 
         profile.UpdateProfile(profileItem);
         
@@ -56,7 +56,7 @@ public class ProfileController(IProfileRepository profile) : BaseApiController
         {
             return NoContent();
         }
-        return BadRequest("Problem Update Profile");
+        return BadRequest(new {success= false, message = "Problem Update Profile"});
     }
 
 

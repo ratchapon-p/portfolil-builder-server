@@ -22,7 +22,7 @@ public class FileController : BaseApiController
     {
         if (file == null || file.Length == 0)
         {
-            return BadRequest("No file selected");
+            return BadRequest(new {success= false, message = "No file selected"});
         }
 
         var filePath = Path.Combine(_uploadPath, file.FileName);
@@ -39,15 +39,15 @@ public class FileController : BaseApiController
         public IActionResult DeleteFile([FromQuery] string fileName)
         {
             if (string.IsNullOrEmpty(fileName))
-                return BadRequest("No file name provided");
+                return BadRequest(new {success= false, message = "No file name provided"});
 
             var filePath = Path.Combine(_uploadPath, fileName);
             if (!System.IO.File.Exists(filePath))
-                return NotFound("File not found");
+                return NotFound(new { success = false, message = "File not found" });
 
             System.IO.File.Delete(filePath);
 
-            return Ok("File deleted");
+            return Ok(new {success=true,message= "File deleted"});
         }
 
 }

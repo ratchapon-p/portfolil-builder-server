@@ -15,9 +15,9 @@ public class ExperienceController(IGenericListRepository<Experience> repo) : Bas
     {
         var experience = await repo.GetByIdAsync(id);
 
-        if (experience == null) return NotFound("Not Found experience form this id");
+        if (experience == null) return NotFound(new {success= false, message = "Not Found experience form this id"});
 
-        return experience;
+        return Ok(new {success = true, data = experience});
     }
 
     [HttpGet("list/{userId:int}")]
@@ -55,7 +55,7 @@ public class ExperienceController(IGenericListRepository<Experience> repo) : Bas
             return CreatedAtAction("GetExperienceById", new { id = experience.Id }, experience);
         }
 
-        return BadRequest("Problem create experience");
+        return BadRequest(new {success= false, message = "Problem create experience"});
     }
 
     [Authorize]
@@ -64,11 +64,11 @@ public class ExperienceController(IGenericListRepository<Experience> repo) : Bas
     {
         var userId = GetUserId();
 
-        if (experienceItem.Id != id) return BadRequest("Cannot update experience");
+        if (experienceItem.Id != id) return BadRequest(new { success = false, message = "Cannot update experience" });
 
         var experience = await repo.GetByIdAsync(id);
 
-        if (experience == null || experience.UserId != userId) return NotFound("Experience not found or does not belong to user");
+        if (experience == null || experience.UserId != userId) return NotFound(new { success = false, message = "Experience not found or does not belong to user" });
 
         experience.Role = experienceItem.Role;
         experience.Company = experienceItem.Company;
@@ -83,7 +83,7 @@ public class ExperienceController(IGenericListRepository<Experience> repo) : Bas
             return NoContent();
         }
 
-        return BadRequest("Problem Update experience");
+        return BadRequest(new { success = false, message = "Problem Update experience" });
     }
 
     [Authorize]
@@ -92,7 +92,7 @@ public class ExperienceController(IGenericListRepository<Experience> repo) : Bas
     {
         var experience = await repo.GetByIdAsync(id);
 
-        if (experience == null) return NotFound("Not Found Experience to delete");
+        if (experience == null) return NotFound(new { success = false, message = "Not Found Experience to delete" });
 
         repo.Remove(experience);
 

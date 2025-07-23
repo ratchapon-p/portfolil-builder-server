@@ -14,9 +14,9 @@ public class ContactController(IContactRepository contact) : BaseApiController
     {
         var contactResult = await contact.GetContactByIdAsync(id);
 
-        if (contactResult == null) return NotFound("Not found contact");
+        if (contactResult == null) return NotFound(new { success = false, message = "Not found contact" });
 
-        return contactResult;
+        return Ok(new {success = true, data = contactResult});
     }
 
     [Authorize]
@@ -33,7 +33,7 @@ public class ContactController(IContactRepository contact) : BaseApiController
         {
             return CreatedAtAction("Getcontact", new { id = contactItem.Id }, contactItem);
         }
-        return BadRequest("Problem Create Contact");
+        return BadRequest(new { success = false, message = "Problem Create Contact" });
     }
 
     [Authorize]
@@ -44,7 +44,7 @@ public class ContactController(IContactRepository contact) : BaseApiController
 
         contactItem.UserId = userId;
 
-        if (contactItem.Id != id || !contact.ContactExists(id)) return BadRequest("Cannot update contact, Contact not exists");
+        if (contactItem.Id != id || !contact.ContactExists(id)) return BadRequest(new { success = false, message = "Cannot update contact, Contact not exists" });
 
         contact.UpdateContact(contactItem);
 
@@ -52,7 +52,7 @@ public class ContactController(IContactRepository contact) : BaseApiController
         {
             return NoContent();
         }
-        return BadRequest("Problem Update Contact");
+        return BadRequest(new { success = false, message = "Problem Update Contact" });
     }
 
     

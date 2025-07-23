@@ -15,9 +15,9 @@ public class CertificateController(IGenericListRepository<Certificate> repo) : B
     {
         var certificate = await repo.GetByIdAsync(id);
 
-        if (certificate == null) return NotFound("Not Found certificate form this id");
+        if (certificate == null) return NotFound(new { success = false, message = "Not Found certificate form this id" });
 
-        return certificate;
+        return Ok(new {success = true, data = certificate});;
     }
 
     [HttpGet("list/{userId:int}")]
@@ -55,7 +55,7 @@ public class CertificateController(IGenericListRepository<Certificate> repo) : B
             return CreatedAtAction("GetCertificateById", new { id = certificate.Id }, certificate);
         }
 
-        return BadRequest("Problem create certificate");
+        return BadRequest(new {success= false, message = "Problem create certificate"});
     }
 
     [Authorize]
@@ -64,11 +64,11 @@ public class CertificateController(IGenericListRepository<Certificate> repo) : B
     {
         var userId = GetUserId();
 
-        if (certificateItem.Id != id) return BadRequest("Cannot update certificate");
+        if (certificateItem.Id != id) return BadRequest(new {success= false, message = "Cannot update certificate"});
 
         var certificate = await repo.GetByIdAsync(id);
 
-        if (certificate == null || certificate.UserId != userId) return NotFound("Certificate not found or does not belong to user");
+        if (certificate == null || certificate.UserId != userId) return NotFound(new {success= false, message = "Certificate not found or does not belong to user"});
 
         certificate.Name = certificateItem.Name;
         certificate.Description = certificateItem.Description;
@@ -84,7 +84,7 @@ public class CertificateController(IGenericListRepository<Certificate> repo) : B
             return NoContent();
         }
 
-        return BadRequest("Problem Update certificate");
+        return BadRequest(new {success= false, message = "Problem Update certificate"});
     }
 
     [Authorize]
@@ -93,7 +93,7 @@ public class CertificateController(IGenericListRepository<Certificate> repo) : B
     {
         var certificate = await repo.GetByIdAsync(id);
 
-        if (certificate == null) return NotFound("Not Found Certificate to delete");
+        if (certificate == null) return NotFound(new {success= false, message = "Not Found Certificate to delete"});
 
         repo.Remove(certificate);
 
@@ -102,6 +102,6 @@ public class CertificateController(IGenericListRepository<Certificate> repo) : B
             return NoContent();
         }
 
-        return BadRequest("Problem delete certificate");
+        return BadRequest(new {success= false, message = "Problem delete certificate"});
     }
 }

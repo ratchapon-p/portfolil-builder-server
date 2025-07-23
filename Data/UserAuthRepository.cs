@@ -9,6 +9,11 @@ namespace portfolio_builder_server.Data;
 
 public class UserAuthRepository(StoreContext context,IPasswordHasher<UserAuth> hasher) : IUserAuthServices
 {
+    public Task<UserAuth?> GetUserByIdAsync(int id)
+    {
+        return context.Set<UserAuth>().FindAsync(id).AsTask();
+    }
+
     public async Task<UserAuth> Login(string email, string password)
     {
         email = email.Trim().ToLower();

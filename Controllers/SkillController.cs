@@ -15,9 +15,9 @@ public class SkillController(IGenericListRepository<Skill> repo) : BaseApiContro
     {
         var skill = await repo.GetByIdAsync(id);
 
-        if (skill == null) return NotFound("Not Found skill form this id");
+        if (skill == null) return NotFound(new {success= false, message = "Not Found skill form this id"});
 
-        return skill;
+        return Ok(new {success = true, data = skill});;
     }
 
     [HttpGet("list/{userId:int}")]
@@ -52,7 +52,7 @@ public class SkillController(IGenericListRepository<Skill> repo) : BaseApiContro
             return CreatedAtAction("GetSkillById", new { id = skill.Id }, skill);
         }
 
-        return BadRequest("Problem create skill");
+        return BadRequest(new {success= false, message = "Problem create skill"});
     }
 
     [Authorize]
@@ -61,11 +61,11 @@ public class SkillController(IGenericListRepository<Skill> repo) : BaseApiContro
     {
         var userId = GetUserId();
 
-        if (skillItem.Id != id) return BadRequest("Cannot update skill");
+        if (skillItem.Id != id) return BadRequest(new {success= false, message = "Cannot update skill"});
 
         var skill = await repo.GetByIdAsync(id);
 
-        if (skill == null || skill.UserId != userId) return NotFound("Skill not found or does not belong to user");
+        if (skill == null || skill.UserId != userId) return NotFound(new {success= false, message = "Skill not found or does not belong to user"});
 
         skill.Name = skillItem.Name;
         skill.Level = skillItem.Level;
@@ -78,7 +78,7 @@ public class SkillController(IGenericListRepository<Skill> repo) : BaseApiContro
             return NoContent();
         }
 
-        return BadRequest("Problem Update skill");
+        return BadRequest(new {success= false, message = "Problem Update skill"});
     }
 
     [Authorize]
@@ -87,7 +87,7 @@ public class SkillController(IGenericListRepository<Skill> repo) : BaseApiContro
     {
         var skill = await repo.GetByIdAsync(id);
 
-        if (skill == null) return NotFound("Not Found Skill to delete");
+        if (skill == null) return NotFound(new {success= false, message = "Not Found Skill to delete"});
 
         repo.Remove(skill);
 
@@ -96,6 +96,6 @@ public class SkillController(IGenericListRepository<Skill> repo) : BaseApiContro
             return NoContent();
         }
 
-        return BadRequest("Problem delete skill");
+        return BadRequest(new {success= false, message = "Problem delete skill"});
     }
 }

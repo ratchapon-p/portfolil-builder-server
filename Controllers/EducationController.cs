@@ -15,9 +15,9 @@ public class EducationController(IGenericListRepository<Education> repo) : BaseA
     {
         var education = await repo.GetByIdAsync(id);
 
-        if (education == null) return NotFound("Not Found education form this id");
+        if (education == null) return NotFound(new { success = false, message = "Not Found education form this id" });
 
-        return education;
+        return  Ok(new {success = true, data = education});;
     }
 
     [HttpGet("list/{userId:int}")]
@@ -55,7 +55,7 @@ public class EducationController(IGenericListRepository<Education> repo) : BaseA
             return CreatedAtAction("GetEducationById", new { id = education.Id }, education);
         }
 
-        return BadRequest("Problem create education");
+        return BadRequest(new { success = false, message = "Problem create education" });
     }
 
     [Authorize]
@@ -64,11 +64,11 @@ public class EducationController(IGenericListRepository<Education> repo) : BaseA
     {
         var userId = GetUserId();
 
-        if (educationItem.Id != id) return BadRequest("Cannot update education");
+        if (educationItem.Id != id) return BadRequest(new { success = false, message = "Cannot update education" });
 
         var education = await repo.GetByIdAsync(id);
 
-        if (education == null || education.UserId != userId) return NotFound("Education not found or does not belong to user");
+        if (education == null || education.UserId != userId) return NotFound(new { success = false, message = "Education not found or does not belong to user" });
 
         education.Degree = educationItem.Degree;
         education.Institution = educationItem.Institution;
@@ -83,7 +83,7 @@ public class EducationController(IGenericListRepository<Education> repo) : BaseA
             return NoContent();
         }
 
-        return BadRequest("Problem Update education");
+        return BadRequest(new { success = false, message = "Problem Update education" });
     }
 
     [Authorize]
@@ -92,7 +92,7 @@ public class EducationController(IGenericListRepository<Education> repo) : BaseA
     {
         var education = await repo.GetByIdAsync(id);
 
-        if (education == null) return NotFound("Not Found Education to delete");
+        if (education == null) return NotFound(new { success = false, message = "Not Found Education to delete" });
 
         repo.Remove(education);
 
@@ -101,6 +101,6 @@ public class EducationController(IGenericListRepository<Education> repo) : BaseA
             return NoContent();
         }
 
-        return BadRequest("Problem delete education");
+        return BadRequest(new { success = false, message = "Problem delete education" });
     }
 }
